@@ -35,22 +35,24 @@ Room* initializeRoomData(int numRooms) {
     }
 
     // Fetch student data and update room occupancy
-    Student *students = getAllStudents();
-    for (int i = 0; i < numRooms; i++) {
-        for (int j = 0; j < MAX_STUDENTS; j++) {
-            if (strcmp(students[j].room, rooms[i].roomNumber) == 0) {
-                rooms[i].bedCount = 1;
-                rooms[i].fanCount = 1;
-                rooms[i].chairCount = 1;
-                rooms[i].tableCount = 1;
-                rooms[i].almirahCount = 1;
-                rooms[i].bulbCount = 1;
-                break;
-            }
+int numStudents;
+Student *students = getAllStudents(&numStudents);
+for (int i = 0; i < numRooms; i++) {
+    for (int j = 0; j < numStudents; j++) {
+        if (strcmp(students[j].room, rooms[i].roomNumber) == 0) {
+            rooms[i].bedCount = 1;
+            rooms[i].fanCount = 1;
+            rooms[i].chairCount = 1;
+            rooms[i].tableCount = 1;
+            rooms[i].almirahCount = 1;
+            rooms[i].bulbCount = 1;
+            break;
         }
     }
+}
 
-    free(students); // Free memory allocated for student data
+free(students); // Free memory allocated for student data
+
 
     return rooms;
 }
