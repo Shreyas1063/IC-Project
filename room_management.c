@@ -1,18 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "room_management.h" // Include header file for function declarations
-
-// Define maximum lengths for strings
-#define MAX_ROOM_NUMBER_LENGTH 10
-#define MAX_ROOM_CAPACITY 4 // Assuming maximum 4 students per room
+#include "student_management.h"
+#include "room_management.h"
 
 // Define structure for a room
 typedef struct {
-    char number[MAX_ROOM_NUMBER_LENGTH];
-    int capacity;
-    int occupancy;
-    char roommates[MAX_ROOM_CAPACITY][MAX_NAME_LENGTH]; // Assuming each roommate name has a maximum length
+    char roomNumber[MAX_ROOM_NUMBER_LENGTH];
+    int bedCount;
+    int fanCount;
+    int chairCount;
+    int tableCount;
+    int almirahCount;
+    int bulbCount;
 } Room;
 
 // Function to initialize room data
@@ -25,52 +25,42 @@ Room* initializeRoomData(int numRooms) {
 
     // Initialize room data
     for (int i = 0; i < numRooms; i++) {
-        snprintf(rooms[i].number, MAX_ROOM_NUMBER_LENGTH, "Room %d", i + 1);
-        rooms[i].capacity = MAX_ROOM_CAPACITY;
-        rooms[i].occupancy = 0;
-        for (int j = 0; j < MAX_ROOM_CAPACITY; j++) {
-            strcpy(rooms[i].roommates[j], ""); // Initialize roommates' names to empty strings
+        snprintf(rooms[i].roomNumber, MAX_ROOM_NUMBER_LENGTH, "W%d", i + 101);
+        rooms[i].bedCount = 0;
+        rooms[i].fanCount = 0;
+        rooms[i].chairCount = 0;
+        rooms[i].tableCount = 0;
+        rooms[i].almirahCount = 0;
+        rooms[i].bulbCount = 0;
+    }
+
+    // Fetch student data and update room occupancy
+    Student *students = getAllStudents();
+    for (int i = 0; i < numRooms; i++) {
+        for (int j = 0; j < MAX_STUDENTS; j++) {
+            if (strcmp(students[j].room, rooms[i].roomNumber) == 0) {
+                rooms[i].bedCount = 1;
+                rooms[i].fanCount = 1;
+                rooms[i].chairCount = 1;
+                rooms[i].tableCount = 1;
+                rooms[i].almirahCount = 1;
+                rooms[i].bulbCount = 1;
+                break;
+            }
         }
     }
+
+    free(students); // Free memory allocated for student data
 
     return rooms;
 }
 
-// Function to assign a student to a room
-void assignRoom(Room *rooms, int numRooms, char *studentName) {
-    int roomIndex = -1;
-
-    // Find the first available room with empty slots
-    for (int i = 0; i < numRooms; i++) {
-        if (rooms[i].occupancy < rooms[i].capacity) {
-            roomIndex = i;
-            break;
-        }
-    }
-
-    // Assign the student to the room
-    if (roomIndex != -1) {
-        strcpy(rooms[roomIndex].roommates[rooms[roomIndex].occupancy], studentName);
-        rooms[roomIndex].occupancy++;
-        printf("%s assigned to %s\n", studentName, rooms[roomIndex].number);
-    } else {
-        printf("No available rooms.\n");
-    }
-}
-
-// Function to display room details and roommate names
-void displayRooms(Room *rooms, int numRooms) {
-    printf("Room\t\tCapacity\tOccupancy\tRoommates\n");
-    printf("------------------------------------------------\n");
+// Function to display room details
+void displayRoomDetails(Room *rooms, int numRooms) {
+    printf("Room Number\tBed\tFan\tChair\tTable\tAlmirah\tBulb\n");
+    printf("------------------------------------------------------------\n");
 
     for (int i = 0; i < numRooms; i++) {
-        printf("%s\t%d\t\t%d\t\t", rooms[i].number, rooms[i].capacity, rooms[i].occupancy);
-        for (int j = 0; j < rooms[i].occupancy; j++) {
-            printf("%s", rooms[i].roommates[j]);
-            if (j < rooms[i].occupancy - 1) {
-                printf(", ");
-            }
-        }
-        printf("\n");
+        printf("%s\t\t%d\t%d\t%d\t%d\t%d\t%d\n", rooms[i].roomNumber, rooms[i].bedCount, rooms[i].fanCount, rooms[i].chairCount, rooms[i].tableCount, rooms[i].almirahCount, rooms[i].bulbCount);
     }
 }
