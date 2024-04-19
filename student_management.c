@@ -65,3 +65,29 @@ void displayStudents() {
 
     fclose(file);
 }
+
+Student* getAllStudents() {
+    FILE *file = fopen(DATABASE_FILE, "r");
+    if (file == NULL) {
+        printf("Error opening database file.\n");
+        return NULL;
+    }
+
+    // Allocate memory for student records
+    Student *students = (Student*)malloc(MAX_STUDENTS * sizeof(Student));
+    if (students == NULL) {
+        printf("Memory allocation error.\n");
+        fclose(file);
+        exit(EXIT_FAILURE);
+    }
+
+    // Read student records from file
+    int count = 0;
+    while (count < MAX_STUDENTS && fscanf(file, "%49[^,],%d,%14[^,],%9[^,],%14[^\n]\n", students[count].name, &students[count].age, students[count].contact, students[count].room, students[count].roll) != EOF) {
+        count++;
+    }
+
+    fclose(file);
+
+    return students;
+}
