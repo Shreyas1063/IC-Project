@@ -3,7 +3,15 @@
 
 // Include necessary header files
 //#include "main.h"
-
+typedef struct {
+    char roomNumber[MAX_ROOM_NUMBER_LENGTH];
+    int bedCount;
+    int fanCount;
+    int chairCount;
+    int tableCount;
+    int almirahCount;
+    int bulbCount;
+} Room;
 
 // Function declarations
 Room* initializeRoomData(int numRooms);
