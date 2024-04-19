@@ -18,5 +18,6 @@ typedef struct {
 // Function declarations
 void addStudent();
 void displayStudents();
+Student* getAllStudents();
 
 #endif /* STUDENT_MANAGEMENT_H */
