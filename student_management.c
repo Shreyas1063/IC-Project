@@ -66,15 +66,36 @@ void displayStudents() {
     fclose(file);
 }
 
-Student* getAllStudents() {
+// Function to count the number of lines in a file
+int countLines(FILE *file) {
+    int count = 0;
+    char buffer[1024]; // Assuming maximum line length is 1024 characters
+
+    // Count lines in the file
+    while (fgets(buffer, sizeof(buffer), file) != NULL) {
+        if (buffer[0] != '\n' && buffer[0] != '#') { // Exclude empty lines and comments
+            count++;
+        }
+    }
+
+    rewind(file); // Reset file pointer to the beginning
+
+    return count;
+}
+
+// Function to fetch all student records
+Student* getAllStudents(int *numStudents) {
     FILE *file = fopen(DATABASE_FILE, "r");
     if (file == NULL) {
         printf("Error opening database file.\n");
         return NULL;
     }
 
+    // Determine the number of students in the file
+    *numStudents = countLines(file);
+
     // Allocate memory for student records
-    Student *students = (Student*)malloc(MAX_STUDENTS * sizeof(Student));
+    Student *students = (Student*)malloc((*numStudents) * sizeof(Student));
     if (students == NULL) {
         printf("Memory allocation error.\n");
         fclose(file);
@@ -83,7 +104,7 @@ Student* getAllStudents() {
 
     // Read student records from file
     int count = 0;
-    while (count < MAX_STUDENTS && fscanf(file, "%49[^,],%d,%14[^,],%9[^,],%14[^\n]\n", students[count].name, &students[count].age, students[count].contact, students[count].room, students[count].roll) != EOF) {
+    while (count < *numStudents && fscanf(file, "%49[^,],%d,%14[^,],%9[^,],%14[^\n]\n", students[count].name, &students[count].age, students[count].contact, students[count].room, students[count].roll) != EOF) {
         count++;
     }
 
