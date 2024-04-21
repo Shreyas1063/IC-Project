@@ -7,7 +7,9 @@
 #include "complaint.h"
 #include "admincomplaint.h"
 #include "visitor.h"
-#include "staff_management.h" // Include staff management header file
+#include "staff_management.h"
+#include "man_management.h"
+#include "inventory_management.h" // Include inventory management header file
 
 int main() {
     int choice;
@@ -57,9 +59,14 @@ int main() {
             printf("8. Load visitors\n");
             printf("9. Add visitor\n");
             printf("10. Display Room Details\n");
-            printf("11. Add Staff\n"); // New option
-            printf("12. Display Staff\n"); // New option
-            printf("13. Exit\n");
+            printf("11. Add Staff\n");
+            printf("12. Display Staff\n");
+            printf("13. Enter or Exit Hostel\n");
+            printf("14. Display Entry or Exit Log\n");
+            printf("15. Issue Inventory Item\n");
+            printf("16. Display Available Inventory\n");
+            printf("17. Add Item to Inventory\n");
+            printf("18. Exit\n"); // Changed exit option number
             printf("Enter your choice: ");
             scanf("%d", &choice);
             getchar(); // Consume newline character left in the buffer
@@ -96,18 +103,36 @@ int main() {
                     displayRoomDetails(rooms, numRooms);
                     break;
                 case 11:
-                    add_staff_case(); // Call to add staff function
+                    add_staff_case();
                     break;
                 case 12:
-                    display_staff(); // Call to display staff function
+                    display_staff();
                     break;
                 case 13:
+                    printf("Enter 1 to enter hostel, 2 to leave: ");
+                    scanf("%d", &choice);
+                    getchar(); // Consume newline character left in the buffer
+                    enter_exit_hostel(choice);
+                    break;
+                case 14:
+                    display_log();
+                    break;
+                case 15:
+                    prompt_issue_inventory_item(); // Call to issue inventory item function
+                    break;
+                case 16:
+                    display_inventory(); // Call to display available inventory function
+                    break;
+                case 17:
+                    add_inventory_item_case(); // Call to add item to inventory function
+                    break;
+                case 18:
                     printf("Exiting...\n");
                     break;
                 default:
                     printf("Invalid choice. Please try again.\n");
             }
-        } while (choice != 13);
+        } while (choice != 18);
 
         // Free allocated memory for rooms
         free(rooms);
